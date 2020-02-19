@@ -1,6 +1,6 @@
 const express = require('express');
 
-const db = require('../database/car-dealer.db3');
+const db = require('../database/db-config.js');
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ router.get('/:id', (req, res) => {
     db('Cars')
         .where({ id: id })
         .then(car => {
-            res.status(200).json(car);
+            res.status(200).json(car[0]);
         })
         .catch(err => {
             console.log(err);
@@ -42,7 +42,7 @@ router.post('/', (req, res) => {
     db('Cars')
         .insert(carInfo, 'id')
         .then(count => {
-            res.status(201).json('New Car Added: ', req.body);
+            res.status(201).json(req.body)
         })
         .catch(err => {
             console.log(err);
@@ -61,7 +61,7 @@ router.put('/:id', (req, res) => {
         .where({ id: id })
         .update(changes)
         .then(count => {
-            res.status(200).json('Car Updated: ', req.body);
+            res.status(200).json(req.body)
         })
         .catch(err => {
             console.log(err);
@@ -79,7 +79,9 @@ router.delete('/:id', (req, res) => {
         .where({ id: id })
         .del()
         .then(count => {
-            res.status(200).json('Car Deleted!');
+            res.status(200).json({
+                message: 'Car Deleted!'
+            })
         })
         .catch(err => {
             console.log(err);
